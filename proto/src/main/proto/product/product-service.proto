@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package product;
+
+import "google/protobuf/empty.proto";
+import "common/common.proto";
+
+option java_package = "io.kuz.ecom.proto.product";
+option java_multiple_files = true;
+
+import "product/product.proto";
+
+service ProductService {
+  rpc GetProductById(GetProductByIdRequest) returns (GetProductByIdResponse);
+  rpc GetProductListByCriteria(GetProductListByCriteriaRequest) returns (GetProductListByCriteriaResponse);
+  rpc BatchCreateProducts(BatchCreateProductRequest) returns (google.protobuf.Empty);
+  rpc BatchCreateProductAttribute(BatchCreateProductAttributeRequest) returns (google.protobuf.Empty);
+  rpc BatchCreateProductAttributeOption(BatchCreateProductAttributeOptionRequest) returns (google.protobuf.Empty);
+  rpc BatchCreateCategory(BatchCreateCategoryRequest) returns (google.protobuf.Empty);
+}
+
+message BatchCreateProductRequest {
+  repeated ProductCreateInput products = 1;
+}
+
+message BatchCreateProductAttributeRequest {
+  repeated ProductAttributeCreateInput attributes = 1;
+}
+
+message BatchCreateProductAttributeOptionRequest {
+  repeated ProductAttributeOptionCreateInput options = 1;
+}
+
+message BatchCreateCategoryRequest {
+  repeated ProductCategoryCreateInput categories = 1;
+}
+
+message GetProductByIdRequest {
+  int64 id = 1;
+}
+
+message GetProductByIdResponse {
+  Product product = 1;
+}
+
+message GetProductListByCriteriaRequest {
+  ProductFetchCriteria criteria = 1;
+  int64 offset = 2;
+  int64 limit = 3;
+}
+
+message GetProductListByCriteriaResponse {
+  repeated Product products = 1;
+  common.PaginationMeta meta = 2;
+}
+
+// -- DEBUG --
+
+service DebugProductService {
+  rpc GenerateData(GenerateDataRequest) returns (google.protobuf.Empty);
+}
+
+message GenerateDataRequest {
+  int64 products_count = 1;
+  bool should_randomize_products_distribution = 2;
+  int64 categories_count = 3;
+  int64 attributes_per_category_min = 4;
+  int64 attributes_per_category_max = 5;
+  int64 options_per_attribute_min = 6;
+  int64 options_per_attribute_max = 7;
+}

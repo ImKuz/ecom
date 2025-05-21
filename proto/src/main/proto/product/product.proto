@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package product;
+
+option java_package = "io.kuz.ecom.proto.product";
+option java_multiple_files = true;
+
+message Product {
+
+  int64 id = 1;
+
+  string title = 2;
+
+  int64 category_id = 3;
+
+  string category_code = 4;
+
+  repeated ProductAttribute attributes = 5;
+
+  int64 price_cents = 6;
+}
+
+message ProductCreateInput {
+
+  string title = 1;
+
+  int64 category_id = 3;
+
+  // Format attributeId:optionId (e.g "201:101")
+  repeated string attribute_options = 4;
+
+  int64 price_cents = 6;
+}
+
+message ProductAttribute {
+
+  int64 id = 1;
+
+  string code = 3;
+
+  repeated ProductAttributeOption options = 4;
+}
+
+message ProductAttributeCreateInput {
+
+  string code = 1;
+
+  int64 category_id = 2;
+}
+
+message ProductAttributeOption {
+
+  int64 id = 1;
+
+  int64 attribute_id = 2;
+
+  string code = 3;
+}
+
+message ProductAttributeOptionCreateInput {
+
+  int64 attribute_id = 2;
+
+  string code = 3;
+}
+
+message ProductCategoryCreateInput {
+
+  string code = 1;
+}
+
+// SEARCH
+
+message ProductFetchCriteria {
+
+  optional string query = 1;
+
+  optional int64 category_id = 2;
+
+  // Format attributeId:optionId (e.g "201:101")
+  repeated string attribute_options = 4;
+
+  optional int64 min_price_cents = 5;
+
+  optional int64 max_price_cents = 6;
+}
+
+
