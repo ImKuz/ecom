@@ -1,4 +1,4 @@
-package io.kuz.ecom.common.models
+package io.kuz.ecom.common.models.product
 
 data class ProductModel(
     val id: Int,

@@ -1,6 +1,6 @@
 package io.kuz.ecom.gateway.mapper;
 
-import io.kuz.ecom.common.dto.ProductAttributeDTO;
+import io.kuz.ecom.gateway.dto.product.ProductAttributeDTO;
 import io.kuz.ecom.proto.product.ProductAttribute;
 import java.util.stream.Collectors;
 
@@ -12,7 +12,7 @@ public class ProductAttributeMapper {
                 attributeLabelForCode(proto.getCode()),
                 proto.getOptionsList()
                         .stream()
-                        .map(val -> ProductAttributeOptionMapper.toDto(val))
+                        .map(ProductAttributeOptionMapper::toDto)
                         .collect(Collectors.toList())
         );
     }

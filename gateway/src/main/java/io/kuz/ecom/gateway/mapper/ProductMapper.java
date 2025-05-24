@@ -1,8 +1,9 @@
 package io.kuz.ecom.gateway.mapper;
 
+import io.kuz.ecom.gateway.dto.product.ProductListDTO;
+import io.kuz.ecom.proto.product.GetProductListByCriteriaResponse;
 import io.kuz.ecom.proto.product.Product;
-import io.kuz.ecom.common.dto.ProductDTO;
-import io.kuz.ecom.common.price.PriceMapper;
+import io.kuz.ecom.gateway.dto.product.ProductDTO;
 
 import java.math.BigDecimal;
 import java.util.stream.Collectors;
@@ -17,9 +18,20 @@ public class ProductMapper {
                 categoryLabelForCode(proto.getCategoryCode()),
                 proto.getAttributesList()
                             .stream()
-                            .map(v -> ProductAttributeMapper.toDto(v))
+                            .map(ProductAttributeMapper::toDto)
                             .collect(Collectors.toList()),
                 BigDecimal.valueOf(proto.getPriceCents(), 2)
+        );
+    }
+
+    public static ProductListDTO toDTO(GetProductListByCriteriaResponse proto) {
+        return new ProductListDTO(
+            proto
+                .getProductsList()
+                .stream()
+                .map(ProductMapper::toDto)
+                .collect(Collectors.toList()),
+            PaginationMetaMapper.toDTO(proto.getMeta())
         );
     }
 

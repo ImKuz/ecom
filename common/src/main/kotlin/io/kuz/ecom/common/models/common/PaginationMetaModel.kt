@@ -1,4 +1,4 @@
-package io.kuz.ecom.common.models
+package io.kuz.ecom.common.models.common
 
 data class PaginationMetaModel(
     val limit: Long,

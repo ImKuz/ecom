@@ -1,6 +1,6 @@
 package io.kuz.ecom.gateway.mapper;
 
-import io.kuz.ecom.common.dto.ProductAttributeOptionDTO;
+import io.kuz.ecom.gateway.dto.product.ProductAttributeOptionDTO;
 import io.kuz.ecom.proto.product.ProductAttributeOption;
 
 public class ProductAttributeOptionMapper {

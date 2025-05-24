@@ -1,6 +1,6 @@
 package io.kuz.ecom.product.app
 
-import io.kuz.ecom.common.models.ProductModel
+import io.kuz.ecom.common.models.product.ProductModel
 import io.kuz.ecom.product.domain.ProductRepository
 import org.springframework.stereotype.Component
 

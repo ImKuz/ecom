@@ -1,7 +1,7 @@
 package io.kuz.ecom.product.infra.db.query
 
-import io.kuz.ecom.common.models.ProductAttributeModel
-import io.kuz.ecom.common.models.ProductAttributeOptionModel
+import io.kuz.ecom.common.models.product.ProductAttributeModel
+import io.kuz.ecom.common.models.product.ProductAttributeOptionModel
 import io.kuz.ecom.product.infra.db.table.ProductAttributeOptionsTable
 import io.kuz.ecom.product.infra.db.table.ProductAttributeValuesTable
 import io.kuz.ecom.product.infra.db.table.ProductAttributesTable

@@ -1,7 +1,7 @@
 package io.kuz.ecom.product.infra.db.query
 
-import io.kuz.ecom.common.models.ProductAttributeModel
-import io.kuz.ecom.common.models.ProductModel
+import io.kuz.ecom.common.models.product.ProductAttributeModel
+import io.kuz.ecom.common.models.product.ProductModel
 import io.kuz.ecom.product.infra.db.table.ProductCategoriesTable
 import io.kuz.ecom.product.infra.db.table.ProductTable
 import org.jetbrains.exposed.sql.Join

@@ -1,6 +1,6 @@
 package io.kuz.grpc.mapper.common
 
-import io.kuz.ecom.common.models.PaginationMetaModel
+import io.kuz.ecom.common.models.common.PaginationMetaModel
 import io.kuz.ecom.proto.common.PaginationMeta
 
 object PaginationMetaMapper {

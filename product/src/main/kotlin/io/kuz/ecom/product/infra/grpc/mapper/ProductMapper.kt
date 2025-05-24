@@ -1,8 +1,8 @@
 package io.kuz.ecom.product.infra.grpc.mapper
 
-import io.kuz.ecom.common.models.ProductAttributeModel
-import io.kuz.ecom.common.models.ProductAttributeOptionModel
-import io.kuz.ecom.common.models.ProductModel
+import io.kuz.ecom.common.models.product.ProductAttributeModel
+import io.kuz.ecom.common.models.product.ProductAttributeOptionModel
+import io.kuz.ecom.common.models.product.ProductModel
 import io.kuz.ecom.product.domain.model.ProductAttributeCreateInputModel
 import io.kuz.ecom.product.domain.model.ProductAttributeOptionCreateInputModel
 import io.kuz.ecom.product.domain.model.ProductCategoryCreateInputModel
