@@ -1,6 +1,6 @@
-package io.kuz.ecom.gateway.mapper;
+package io.kuz.ecom.gateway.common.mapper;
 
-import io.kuz.ecom.gateway.dto.PaginationMetaDTO;
+import io.kuz.ecom.gateway.common.dto.PaginationMetaDTO;
 import io.kuz.ecom.proto.common.PaginationMeta;
 
 public class PaginationMetaMapper {

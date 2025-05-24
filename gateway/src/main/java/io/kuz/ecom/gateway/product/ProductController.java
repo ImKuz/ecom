@@ -1,40 +1,33 @@
-package io.kuz.ecom.gateway;
+package io.kuz.ecom.gateway.product;
 
-import io.kuz.ecom.gateway.dto.product.ProductDTO;
-import io.kuz.ecom.gateway.common.exception.InputException;
+import io.grpc.Context;
+import io.grpc.stub.MetadataUtils;
 import io.kuz.ecom.gateway.common.response.ApiResponse;
-import io.kuz.ecom.gateway.dto.product.ProductListDTO;
-import io.kuz.ecom.gateway.mapper.ProductFetchCriteriaMapper;
-import io.kuz.ecom.gateway.mapper.ProductMapper;
+import io.kuz.ecom.gateway.product.dto.ProductDTO;
+import io.kuz.ecom.gateway.product.dto.ProductListDTO;
+import io.kuz.ecom.gateway.product.mapper.ProductFetchCriteriaMapper;
+import io.kuz.ecom.gateway.product.mapper.ProductMapper;
 import io.kuz.ecom.proto.product.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Stream;
 
 @RestController
-public class GatewayController {
+public class ProductController {
 
     private final ProductServiceGrpc.ProductServiceBlockingStub productStub;
 
     @Autowired
-    public GatewayController(ProductServiceGrpc.ProductServiceBlockingStub productStub) {
+    public ProductController(ProductServiceGrpc.ProductServiceBlockingStub productStub) {
         this.productStub = productStub;
     }
 
-    @GetMapping("/hello")
-    public ApiResponse<String> hello() {
-        return ApiResponse.success("Hello!");
-    }
-
-    // PRODUCT
-
     @GetMapping("/products/{id}")
-    public ApiResponse<ProductDTO> findProductById(@PathVariable("id") long id) {
+    public ApiResponse<ProductDTO> findProductById(
+        @PathVariable("id") long id
+    ) {
         GetProductByIdRequest request = GetProductByIdRequest
             .newBuilder()
             .setId(id)

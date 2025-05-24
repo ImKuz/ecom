@@ -1,9 +1,10 @@
-package io.kuz.ecom.gateway.mapper;
+package io.kuz.ecom.gateway.product.mapper;
 
-import io.kuz.ecom.gateway.dto.product.ProductListDTO;
+import io.kuz.ecom.gateway.common.mapper.PaginationMetaMapper;
+import io.kuz.ecom.gateway.product.dto.ProductListDTO;
 import io.kuz.ecom.proto.product.GetProductListByCriteriaResponse;
 import io.kuz.ecom.proto.product.Product;
-import io.kuz.ecom.gateway.dto.product.ProductDTO;
+import io.kuz.ecom.gateway.product.dto.ProductDTO;
 
 import java.math.BigDecimal;
 import java.util.stream.Collectors;

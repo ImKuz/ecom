@@ -1,6 +1,6 @@
-package io.kuz.ecom.gateway.mapper;
+package io.kuz.ecom.gateway.product.mapper;
 
-import io.kuz.ecom.gateway.dto.product.ProductAttributeDTO;
+import io.kuz.ecom.gateway.product.dto.ProductAttributeDTO;
 import io.kuz.ecom.proto.product.ProductAttribute;
 import java.util.stream.Collectors;
 

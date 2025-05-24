@@ -1,4 +1,4 @@
-package io.kuz.ecom.gateway.mapper;
+package io.kuz.ecom.gateway.product.mapper;
 
 import io.kuz.ecom.gateway.common.exception.InputException;
 import io.kuz.ecom.proto.product.ProductFetchCriteria;
