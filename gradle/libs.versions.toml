@@ -1,0 +1,72 @@
+[versions]
+# Kotlin & Plugins
+kotlin = "1.9.24"
+kotlin-spring = "2.1.21"
+
+# Spring
+spring-boot = "3.4.5"
+spring-dep-mgmt = "1.1.7"
+spring-context = "6.1.14"
+
+# Logging
+slf4j = "2.0.9"
+logback = "1.4.11"
+
+# gRPC & Protobuf
+grpc = "1.64.0"
+grpc-kotlin = "1.4.1"
+protobuf-java = "4.28.2"
+protoc = "3.25.3"
+
+# Exposed & DB
+exposed = "0.50.1"
+postgresql = "42.7.3"
+hikaricp = "5.1.0"
+
+# Coroutines
+coroutines = "1.8.1"
+
+# Lombok (plugin only)
+lombok = "8.13.1"
+
+[libraries]
+# Spring
+spring-boot-starter = { module = "org.springframework.boot:spring-boot-starter", version.ref = "spring-boot" }
+spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "spring-boot" }
+spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis", version.ref = "spring-boot" }
+spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test", version.ref = "spring-boot" }
+spring-context = { module = "org.springframework:spring-context", version.ref = "spring-context" }
+
+# Logging
+slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "slf4j" }
+logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "logback" }
+
+# gRPC & Protobuf
+grpc-netty = { module = "io.grpc:grpc-netty", version.ref = "grpc" }
+grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpc" }
+grpc-protobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpc" }
+grpc-kotlin-stub = { module = "io.grpc:grpc-kotlin-stub", version.ref = "grpc-kotlin" }
+protobuf-java = { module = "com.google.protobuf:protobuf-java", version.ref = "protobuf-java" }
+
+# Exposed & DB
+exposed-core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
+exposed-dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
+exposed-jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+hikaricp = { module = "com.zaxxer:HikariCP", version.ref = "hikaricp" }
+
+# Coroutines
+kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "coroutines" }
+
+# JUnit / Test
+junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "1.10.2" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin-spring" }
+spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }
+spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "spring-dep-mgmt" }
+lombok = { id = "io.freefair.lombok", version.ref = "lombok" }
+protobuf = { id = "com.google.protobuf", version = "0.9.4" }
+application = { id = "application" }
+java = { id = "java" }

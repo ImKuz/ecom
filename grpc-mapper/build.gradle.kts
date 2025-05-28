@@ -6,7 +6,7 @@ group = "io.kuz"
 version = "unspecified"
 
 dependencies {
-    implementation("com.google.protobuf:protobuf-java:4.28.2")
+    implementation(libs.protobuf.java)
     implementation(project(":proto"))
     implementation(project(":common"))
 }

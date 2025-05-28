@@ -1,24 +1,24 @@
 plugins {
-    java
-    id("io.freefair.lombok") version "8.13.1"
-    id("org.springframework.boot") version "3.4.5"
-    id("io.spring.dependency-management") version "1.1.7"
+    alias(libs.plugins.java)
+    alias(libs.plugins.lombok)
+    alias(libs.plugins.spring.boot)
+    alias(libs.plugins.spring.dependency.management)
 }
 
 group = "io.kuz"
 version = "0.0.1-SNAPSHOT"
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("io.grpc:grpc-kotlin-stub:1.4.1")
-    implementation("io.grpc:grpc-netty:1.64.0")
+    implementation(libs.spring.boot.starter)
+    implementation(libs.spring.boot.starter.web)
+    implementation(libs.grpc.kotlin.stub)
+    implementation(libs.grpc.netty)
 
     implementation(project(":common"))
     implementation(project(":proto"))
 
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation(libs.spring.boot.starter.test)
+    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.withType<Test> {

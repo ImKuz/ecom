@@ -1,7 +1,5 @@
 package io.kuz.ecom.gateway.product;
 
-import io.grpc.Context;
-import io.grpc.stub.MetadataUtils;
 import io.kuz.ecom.gateway.common.response.ApiResponse;
 import io.kuz.ecom.gateway.product.dto.ProductDTO;
 import io.kuz.ecom.gateway.product.dto.ProductListDTO;
