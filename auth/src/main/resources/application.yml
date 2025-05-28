@@ -1,0 +1,7 @@
+app:
+  verify:
+    ttl: 600
+    retry-timeout: 60
+  token:
+    access-ttl: 3600
+    refresh-ttl: 36000
