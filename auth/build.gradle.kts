@@ -24,6 +24,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.reactor)
     implementation(libs.java.jwt)
+    implementation(libs.bcrypt)
     testImplementation(kotlin("test"))
 }
 
