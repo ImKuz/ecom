@@ -1,0 +1,72 @@
+package io.kuz.ecom.auth.app.service
+
+import io.kuz.ecom.auth.app.service.extension.readChecked
+import io.kuz.ecom.auth.domain.VerificationService
+import io.kuz.ecom.auth.domain.exception.TooEarlyException
+import io.kuz.ecom.auth.domain.model.VerificationSessionData
+import io.kuz.ecom.auth.domain.model.VerificationVariant
+import io.kuz.ecom.auth.domain.repository.VerificationRepository
+import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Service
+import java.time.Instant
+import java.util.*
+
+@Service
+class VerificationServiceImpl(
+    private val verificationRepo: VerificationRepository,
+    @Value("\${app.verify.ttl}")
+    private val verifySessionTTL: Long,
+    @Value("\${app.verify.retry-timeout}")
+    private val verifySessionRetryTimeout: Long,
+):VerificationService {
+
+    override suspend fun initiateVerification(variant: VerificationVariant): VerificationSessionData {
+        verificationRepo.readVerificationSession(variant)?.let {
+            verificationRepo.deleteVerificationSession(it.id)
+        }
+
+        val data = VerificationSessionData(
+            id = UUID.randomUUID().toString(),
+            expectedCode = createCode(),
+            ttl = Instant.now().plusSeconds(verifySessionTTL),
+            retryTimeout = Instant.now().plusSeconds(verifySessionRetryTimeout),
+            isConfirmed = false,
+        )
+
+        verificationRepo.createVerificationSession(data, variant)
+        return data
+    }
+
+    override suspend fun resendVerificationCode(sessionId: String) {
+        val data = verificationRepo.readChecked(sessionId)
+        val now = Instant.now()
+
+        if (data.retryTimeout > now) {
+            throw TooEarlyException()
+        }
+
+        verificationRepo.updateVerificationSession(
+            sessionId,
+            expectedCode = createCode(),
+            retryTimeout = now.plusSeconds(verifySessionRetryTimeout),
+        )
+    }
+
+    override suspend fun confirmVerificationData(sessionId: String, code: String): Boolean {
+        val data = verificationRepo.readChecked(sessionId)
+
+        if (data.expectedCode == code) {
+            verificationRepo.updateVerificationSession(sessionId, isConfirmed = true)
+            return true
+        }
+
+        return false
+    }
+
+    private fun createCode(): String {
+        return (0..999_999)
+            .random()
+            .toString()
+            .padStart(6, '0')
+    }
+}

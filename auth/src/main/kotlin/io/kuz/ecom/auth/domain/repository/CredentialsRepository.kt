@@ -1,4 +1,4 @@
-package io.kuz.ecom.auth.domain
+package io.kuz.ecom.auth.domain.repository
 
 import io.kuz.ecom.auth.domain.model.AuthProvider
 import io.kuz.ecom.auth.domain.model.CredentialsRecordModel

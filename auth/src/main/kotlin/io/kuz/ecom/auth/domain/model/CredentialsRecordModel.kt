@@ -12,4 +12,11 @@ sealed class Credentials {
 data class CredentialsRecordModel(
     val userId: UUID,
     val credentials: Credentials,
-)
+) {
+    val authProvider: AuthProvider
+        get() {
+            return when (credentials) {
+                is Credentials.Local -> AuthProvider.LOCAL
+            }
+        }
+}

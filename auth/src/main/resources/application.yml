@@ -1,7 +1,14 @@
+spring:
+  redis:
+    host: localhost
+    port: 6379
+    database: 1
 app:
   verify:
     ttl: 600
     retry-timeout: 60
   token:
+    publicKeyPath: ".local/publicKey"
+    privateKeyPath: ".local/privateKey"
     access-ttl: 3600
     refresh-ttl: 36000

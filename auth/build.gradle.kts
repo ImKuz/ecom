@@ -14,11 +14,16 @@ dependencies {
     implementation(libs.grpc.kotlin.stub)
     implementation(libs.grpc.netty)
     implementation(libs.spring.context)
+    implementation(libs.spring.boot.starter.data.redis)
     implementation(libs.exposed.core)
     implementation(libs.exposed.dao)
     implementation(libs.exposed.jdbc)
     implementation(libs.postgresql)
     implementation(libs.hikaricp)
+    implementation(libs.jackson.module.kotlin)
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.kotlinx.coroutines.reactor)
+    implementation(libs.java.jwt)
     testImplementation(kotlin("test"))
 }
 
