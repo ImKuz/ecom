@@ -18,7 +18,6 @@ import javax.sql.DataSource
 @ConfigurationProperties(prefix = "db")
 class AuthDBProperties {
     lateinit var jdbcUrl: String
-    lateinit var driverClassName: String
     lateinit var username: String
     lateinit var password: String
 }
@@ -32,7 +31,7 @@ class AuthServiceAppConfig(
     fun dataSource(): DataSource = HikariDataSource(
         HikariConfig().apply {
             jdbcUrl = dbProps.jdbcUrl
-            driverClassName = dbProps.driverClassName
+            driverClassName = "org.postgresql.Driver"
             username = dbProps.username
             password = dbProps.password
             maximumPoolSize = 10

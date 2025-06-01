@@ -1,6 +1,7 @@
 package io.kuz.ecom.auth.app.service
 
 import io.kuz.ecom.auth.app.service.extension.readChecked
+import io.kuz.ecom.auth.domain.VerificationCodeService
 import io.kuz.ecom.auth.domain.VerificationService
 import io.kuz.ecom.auth.domain.exception.TooEarlyException
 import io.kuz.ecom.auth.domain.model.VerificationSessionData
@@ -14,6 +15,7 @@ import java.util.*
 @Service
 class VerificationServiceImpl(
     private val verificationRepo: VerificationRepository,
+    private val codeService: VerificationCodeService,
     @Value("\${app.verify.ttl}")
     private val verifySessionTTL: Long,
     @Value("\${app.verify.retry-timeout}")
@@ -27,7 +29,7 @@ class VerificationServiceImpl(
 
         val data = VerificationSessionData(
             id = UUID.randomUUID().toString(),
-            expectedCode = createCode(),
+            expectedCode = codeService.createCode(),
             ttl = Instant.now().plusSeconds(verifySessionTTL),
             retryTimeout = Instant.now().plusSeconds(verifySessionRetryTimeout),
             isConfirmed = false,
@@ -47,7 +49,7 @@ class VerificationServiceImpl(
 
         verificationRepo.updateVerificationSession(
             sessionId,
-            expectedCode = createCode(),
+            expectedCode = codeService.createCode(),
             retryTimeout = now.plusSeconds(verifySessionRetryTimeout),
         )
     }
@@ -61,12 +63,5 @@ class VerificationServiceImpl(
         }
 
         return false
-    }
-
-    private fun createCode(): String {
-        return (0..999_999)
-            .random()
-            .toString()
-            .padStart(6, '0')
     }
 }

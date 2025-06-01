@@ -5,7 +5,6 @@ spring:
     database: 1
 db:
   jdbcUrl: jdbc:postgresql://localhost:8844/ecom
-  driverClassName: org.postgresql.Driver
   username: usr
   password: pass
 app:
