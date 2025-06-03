@@ -2,7 +2,7 @@ package io.kuz.ecom.auth.app.service
 
 import io.kuz.ecom.auth.app.service.extension.readChecked
 import io.kuz.ecom.auth.domain.VerificationCodeService
-import io.kuz.ecom.auth.domain.VerificationService
+import io.kuz.ecom.auth.domain.SessionVerificationService
 import io.kuz.ecom.auth.domain.exception.InvalidCredentialsException
 import io.kuz.ecom.auth.domain.exception.TooEarlyException
 import io.kuz.ecom.auth.domain.model.VerificationSessionData
@@ -14,14 +14,14 @@ import java.time.Instant
 import java.util.*
 
 @Service
-class VerificationServiceImpl(
+class SessionVerificationServiceImpl(
     private val verificationRepo: VerificationRepository,
     private val codeService: VerificationCodeService,
     @Value("\${app.verify.ttl}")
     private val verifySessionTTL: Long,
     @Value("\${app.verify.retry-timeout}")
     private val verifySessionRetryTimeout: Long,
-):VerificationService {
+):SessionVerificationService {
 
     override suspend fun initiateVerification(variant: VerificationVariant): VerificationSessionData {
         verificationRepo.readVerificationSession(variant)?.let {

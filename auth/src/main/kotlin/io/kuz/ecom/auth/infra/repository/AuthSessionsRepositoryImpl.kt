@@ -4,6 +4,7 @@ import io.kuz.ecom.auth.domain.repository.AuthSessionsRepository
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate
 import org.springframework.stereotype.Service
+import java.util.stream.Collectors
 
 @Service
 class AuthSessionsRepositoryImpl(
@@ -14,6 +15,15 @@ class AuthSessionsRepositoryImpl(
         template
             .opsForSet()
             .add(key(userId), sessionId)
+            .awaitSingle()
+    }
+
+    override suspend fun readSessions(userId: String): Set<String> {
+        return template
+            .opsForSet()
+            .members(key(userId))
+            .collect(Collectors.toSet())
+            .defaultIfEmpty(emptySet())
             .awaitSingle()
     }
 

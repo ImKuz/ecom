@@ -3,7 +3,7 @@ package io.kuz.ecom.auth.infra.grpc
 import com.google.protobuf.Empty
 import io.grpc.Status
 import io.kuz.ecom.auth.domain.AuthService
-import io.kuz.ecom.auth.domain.VerificationService
+import io.kuz.ecom.auth.domain.SessionVerificationService
 import io.kuz.ecom.auth.domain.exception.ExpiredException
 import io.kuz.ecom.auth.domain.exception.InvalidCredentialsException
 import io.kuz.ecom.auth.domain.exception.NotFoundException
@@ -12,12 +12,11 @@ import io.kuz.ecom.auth.domain.model.VerificationVariant
 import io.kuz.ecom.proto.auth.*
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
-import java.time.format.DateTimeFormatter
 
 @Service
 class AuthGrpcService(
     private val authService: AuthService,
-    private val verificationService: VerificationService,
+    private val sessionVerificationService: SessionVerificationService,
 ): AuthServiceGrpcKt.AuthServiceCoroutineImplBase() {
 
     private val logger = LoggerFactory.getLogger(AuthGrpcService::class.java)
@@ -25,7 +24,7 @@ class AuthGrpcService(
     override suspend fun signUpInitiateVerification(
         request: SignUpInitiateVerificationRequest
     ): SignUpInitiateVerificationResponse = perform {
-        val data = verificationService.initiateVerification(
+        val data = sessionVerificationService.initiateVerification(
             variant = when (request.provider) {
                 AuthProvider.LOCAL -> VerificationVariant.Email(
                     request.identifier
@@ -51,12 +50,12 @@ class AuthGrpcService(
     override suspend fun signUpConfirmVerification(
         request: SignUpConfirmVerificationRequest
     ): Empty = perform {
-        verificationService.confirmVerificationData(request.sessionId, request.code)
+        sessionVerificationService.confirmVerificationData(request.sessionId, request.code)
         return Empty.newBuilder().build()
     }
 
     override suspend fun signUpResendCode(request: SignUpResendCodeRequest): Empty = perform {
-        verificationService.resendVerificationCode(request.sessionId)
+        sessionVerificationService.resendVerificationCode(request.sessionId)
         return Empty.newBuilder().build()
     }
 
@@ -80,6 +79,11 @@ class AuthGrpcService(
 
     override suspend fun logout(request: LogoutRequest): Empty = perform {
         authService.logout(request.accessToken)
+        return Empty.newBuilder().build()
+    }
+
+    override suspend fun validateToken(request: ValidateTokenRequest): Empty = perform {
+        authService.verifyToken(request.token)
         return Empty.newBuilder().build()
     }
 

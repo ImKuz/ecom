@@ -4,6 +4,8 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
 import com.auth0.jwt.interfaces.DecodedJWT
 import io.kuz.ecom.auth.domain.TokenService
+import io.kuz.ecom.auth.domain.exception.ExpiredException
+import io.kuz.ecom.auth.domain.exception.InvalidCredentialsException
 import io.kuz.ecom.auth.domain.model.TokenMetadata
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
@@ -51,15 +53,19 @@ class TokenServiceImpl(
     )
 
     override fun parseMetadata(tokenString: String): TokenMetadata {
-        val algorithm = Algorithm.RSA256(publicKey)
-        val verifier = JWT.require(algorithm).build()
-        val jwt: DecodedJWT = verifier.verify(tokenString)
-        return TokenMetadata(
-            userId = jwt.getClaim("user_id").asString(),
-            sessionId = jwt.getClaim("session_id").asString(),
-            createdAt = jwt.issuedAtAsInstant,
-            expiresAt = jwt.expiresAtAsInstant,
-        )
+        try {
+            val algorithm = Algorithm.RSA256(publicKey)
+            val verifier = JWT.require(algorithm).build()
+            val jwt: DecodedJWT = verifier.verify(tokenString)
+            return TokenMetadata(
+                userId = jwt.getClaim("user_id").asString(),
+                sessionId = jwt.getClaim("session_id").asString(),
+                createdAt = jwt.issuedAtAsInstant,
+                expiresAt = jwt.expiresAtAsInstant,
+            )
+        } catch (e: Exception) {
+            throw InvalidCredentialsException("The token is invalid: ${e.message}")
+        }
     }
 
     private fun createToken(

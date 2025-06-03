@@ -8,6 +8,7 @@ import io.kuz.ecom.auth.domain.repository.AuthSessionsRepository
 import io.kuz.ecom.auth.domain.repository.CredentialsRepository
 import io.kuz.ecom.auth.domain.repository.VerificationRepository
 import org.springframework.stereotype.Service
+import java.time.Instant
 import java.util.UUID
 
 @Service
@@ -65,5 +66,15 @@ class AuthServiceImpl(
     override suspend fun logout(accessToken: String) {
         val meta = tokenService.parseMetadata(accessToken)
         authSessionsRepo.delete(meta.userId, meta.sessionId)
+    }
+
+    override suspend fun verifyToken(token: String) {
+        val data = tokenService.parseMetadata(token)
+        if (data.expiresAt <= Instant.now()) { throw ExpiredException() }
+
+        val sessions = authSessionsRepo.readSessions(data.userId)
+        if (!sessions.contains(data.sessionId)) {
+            throw InvalidCredentialsException("The session is not found")
+        }
     }
 }
