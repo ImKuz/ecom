@@ -19,7 +19,7 @@ class AuthServiceImpl(
     private val tokenService: TokenService,
 ): AuthService {
 
-    override suspend fun signUp(sessionId: String, password: String) {
+    override suspend fun signUp(sessionId: String, password: String): SessionTokensData {
         val data = verificationRepo.readChecked(sessionId)
 
         if (!data.isConfirmed) throw NotConfirmedException()
@@ -29,15 +29,19 @@ class AuthServiceImpl(
 
         verificationRepo.deleteVerificationSession(sessionId)
 
+        val userId = UUID.randomUUID()
+
         credentialsRepo.createRecord(
             CredentialsRecordModel(
-                userId = UUID.randomUUID(),
+                userId = userId,
                 credentials = Credentials.Local(
                     passwordHash = passwordHasher.hash(password),
                     email = variant.value
                 )
             )
         )
+
+        return createAuthSession(userId.toString())
     }
 
     override suspend fun login(email: String, password: String): SessionTokensData {
@@ -45,11 +49,12 @@ class AuthServiceImpl(
         val credentials = record.credentials as? Credentials.Local ?: throw IllegalStateException()
         if (!passwordHasher.verify(password, credentials.passwordHash)) throw InvalidCredentialsException()
 
-        val userId = record.userId.toString()
+        return createAuthSession(record.userId.toString())
+    }
+
+    private suspend fun createAuthSession(userId: String): SessionTokensData {
         val sessionId = UUID.randomUUID().toString()
-
         authSessionsRepo.create(userId, sessionId)
-
         return SessionTokensData(
             userId = userId,
             accessToken = tokenService.createAccessToken(userId, sessionId),

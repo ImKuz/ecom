@@ -1,3 +1,7 @@
+logging:
+  level:
+    root: DEBUG
+debug: false
 spring:
   redis:
     host: localhost
@@ -8,11 +12,12 @@ db:
   username: usr
   password: pass
 app:
+  port: 7003
   verify:
     ttl: 600
     retry-timeout: 60
   token:
-    publicKeyPath: .local/publicKey
-    privateKeyPath: .local/privateKey
+    publicKeyPath: .local/public_key.pem
+    privateKeyPath: .local/private_key.pem
     access-ttl: 3600
     refresh-ttl: 36000

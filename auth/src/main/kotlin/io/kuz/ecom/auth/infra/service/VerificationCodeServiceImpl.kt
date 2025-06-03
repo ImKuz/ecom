@@ -1,7 +1,9 @@
 package io.kuz.ecom.auth.infra.service
 
 import io.kuz.ecom.auth.domain.VerificationCodeService
+import org.springframework.stereotype.Service
 
+@Service
 class VerificationCodeServiceImpl: VerificationCodeService {
 
     override fun createCode(): String {

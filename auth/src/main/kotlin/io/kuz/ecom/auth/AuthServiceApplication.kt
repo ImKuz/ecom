@@ -1,35 +1,25 @@
 package io.kuz.ecom.product
 
 import io.grpc.ServerBuilder
-import org.springframework.context.annotation.AnnotationConfigApplicationContext
+import io.kuz.ecom.auth.config.AuthApplicationProperties
+import io.kuz.ecom.auth.infra.grpc.AuthGrpcService
+import io.kuz.ecom.auth.infra.grpc.AuthGrpcServiceRequestInterceptor
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.runApplication
 
-class AuthServiceApplication {
+@SpringBootApplication
+class AuthServiceApplication
 
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            AuthServiceApplication().run()
-        }
-    }
+fun main(args: Array<String>) {
+    val context = runApplication<AuthServiceApplication>(*args)
+    val service = context.getBean(AuthGrpcService::class.java)
+    val props = context.getBean(AuthApplicationProperties::class.java)
 
-    fun run() {
-        val context = AnnotationConfigApplicationContext(AuthServiceAppConfig::class.java)
+    val server = ServerBuilder
+        .forPort(props.port)
+        .addService(service)
+        .build()
+        .start()
 
-//        val service = context.getBean(ProductGrpcService::class.java)
-//        val server = ServerBuilder.forPort(7001)
-//            .addService(service)
-//            .build()
-//            .start()
-//
-//        val debugServer = ServerBuilder.forPort(8889)
-//            .addService(debugService)
-//            .build()
-//            .start()
-//
-//        Thread {
-//            debugServer.awaitTermination()
-//        }.start()
-//
-//        server.awaitTermination()
-    }
+    server.awaitTermination()
 }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.redis.connection.RedisStringCommands.SetOption
 import org.springframework.data.redis.core.ReactiveStringRedisTemplate
 import org.springframework.data.redis.core.ReactiveValueOperations
 import org.springframework.data.redis.core.getAndAwait
@@ -118,7 +119,13 @@ class VerificationRepositoryImpl(
             }
             val updatedSession = updater(it)
             val json = objectMapper.writeValueAsString(updatedSession)
-            ops.set(seshDataKey(id), json).awaitSingle()
+            ops.set(
+                seshDataKey(id),
+                json,
+                // FIXME: TTL is reset on update, this is fine,
+                //  but need to find the way to use KEEPTTL
+                Duration.of(verifySessionTTL, ChronoUnit.SECONDS)
+            ).awaitSingle()
         } ?: throw NotFoundException()
     }
 

@@ -3,6 +3,7 @@ package io.kuz.ecom.auth.app.service
 import io.kuz.ecom.auth.app.service.extension.readChecked
 import io.kuz.ecom.auth.domain.VerificationCodeService
 import io.kuz.ecom.auth.domain.VerificationService
+import io.kuz.ecom.auth.domain.exception.InvalidCredentialsException
 import io.kuz.ecom.auth.domain.exception.TooEarlyException
 import io.kuz.ecom.auth.domain.model.VerificationSessionData
 import io.kuz.ecom.auth.domain.model.VerificationVariant
@@ -54,14 +55,13 @@ class VerificationServiceImpl(
         )
     }
 
-    override suspend fun confirmVerificationData(sessionId: String, code: String): Boolean {
+    override suspend fun confirmVerificationData(sessionId: String, code: String) {
         val data = verificationRepo.readChecked(sessionId)
 
         if (data.expectedCode == code) {
             verificationRepo.updateVerificationSession(sessionId, isConfirmed = true)
-            return true
+        } else {
+            throw InvalidCredentialsException()
         }
-
-        return false
     }
 }
