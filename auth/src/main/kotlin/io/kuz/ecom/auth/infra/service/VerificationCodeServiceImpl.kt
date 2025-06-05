@@ -7,9 +7,10 @@ import org.springframework.stereotype.Service
 class VerificationCodeServiceImpl: VerificationCodeService {
 
     override fun createCode(): String {
-        return (0..999_999)
-            .random()
-            .toString()
-            .padStart(6, '0')
+        return "000000"
+//        return (0..999_999)
+//            .random()
+//            .toString()
+//            .padStart(6, '0')
     }
 }
