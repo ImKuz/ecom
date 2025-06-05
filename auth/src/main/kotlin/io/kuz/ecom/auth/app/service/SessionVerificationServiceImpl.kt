@@ -23,6 +23,7 @@ class SessionVerificationServiceImpl(
     private val verifySessionRetryTimeout: Long,
 ):SessionVerificationService {
 
+    // TODO: Add email validation
     override suspend fun initiateVerification(variant: VerificationVariant): VerificationSessionData {
         verificationRepo.readVerificationSession(variant)?.let {
             verificationRepo.deleteVerificationSession(it.id)

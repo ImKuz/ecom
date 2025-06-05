@@ -13,7 +13,8 @@ dependencies {
     implementation(libs.spring.boot.starter.web)
     implementation(libs.grpc.kotlin.stub)
     implementation(libs.grpc.netty)
-
+    implementation(libs.spring.boot.starter.actuator)
+    implementation(libs.micrometer.registry.prometheus)
     implementation(project(":common"))
     implementation(project(":proto"))
 
