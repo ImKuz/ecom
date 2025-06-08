@@ -7,7 +7,7 @@ import { group } from 'k6';
 
 export default function() {
     group('Sign up flow', function () {
-        const user = userDetails(__VU);
+        const user = userDetails(__VU, __ITER);
 
         const initVerifRes = checkedCall(initiateVerification("LOCAL", user.email), isOK);
         const id = initVerifRes.data.sessionId

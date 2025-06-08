@@ -6,9 +6,7 @@ import io.kuz.ecom.auth.domain.exception.ExpiredException
 import io.kuz.ecom.auth.domain.exception.NotFoundException
 import io.kuz.ecom.auth.domain.model.VerificationSessionData
 import io.kuz.ecom.auth.domain.model.VerificationVariant
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.redis.connection.RedisStringCommands.SetOption
@@ -34,85 +32,91 @@ class VerificationRepositoryImpl(
     override suspend fun createVerificationSession(
         data: VerificationSessionData,
         variant: VerificationVariant
-    ) = coroutineScope {
-        val json = objectMapper.writeValueAsString(data)
-        val variantKey = variantToKey(variant)
-        val duration = Duration.of(verifySessionTTL, ChronoUnit.SECONDS)
+    ) {
+        withContext(Dispatchers.IO) {
+            val json = objectMapper.writeValueAsString(data)
+            val variantKey = variantToKey(variant)
+            val duration = Duration.of(verifySessionTTL, ChronoUnit.SECONDS)
 
-        awaitAll(
-            async { ops.set(seshToVarKey(data.id), variantKey, duration).awaitSingle() },
-            async { ops.set(varToSeshKey(variant), data.id, duration).awaitSingle() },
-            async { ops.set(seshDataKey(data.id), json, duration).awaitSingle() },
-        )
-
-        return@coroutineScope
+            awaitAll(
+                async { ops.set(seshToVarKey(data.id), variantKey, duration).awaitSingle() },
+                async { ops.set(varToSeshKey(variant), data.id, duration).awaitSingle() },
+                async { ops.set(seshDataKey(data.id), json, duration).awaitSingle() },
+            )
+        }
     }
 
-    override suspend fun readVerificationSession(variant: VerificationVariant): VerificationSessionData? {
+    override suspend fun readVerificationSession(
+        variant: VerificationVariant
+    ): VerificationSessionData? = withContext(Dispatchers.IO) {
         ops.getAndAwait(varToSeshKey(variant))?.let { id ->
-            return readVerificationSession(id)
-        } ?: return null
+            readVerificationSession(id)
+        }
     }
 
-    override suspend fun readVerificationSession(id: String): VerificationSessionData? {
+    override suspend fun readVerificationSession(
+        id: String
+    ): VerificationSessionData? = withContext(Dispatchers.IO) {
         ops.getAndAwait(seshDataKey(id))?.let { json ->
-            return objectMapper.readValue(json, VerificationSessionData::class.java)
-        } ?: return null
+            objectMapper.readValue(json, VerificationSessionData::class.java)
+        }
     }
 
-    override suspend fun readVerificationSessionVariant(id: String): VerificationVariant? {
+    override suspend fun readVerificationSessionVariant(
+        id: String
+    ): VerificationVariant? = withContext(Dispatchers.IO) {
         ops.getAndAwait(seshToVarKey(id))?.let { string ->
-            return keyToVariant(string)
-        } ?: return null
+            keyToVariant(string)
+        }
     }
 
     override suspend fun updateVerificationSession(
         id: String,
         expectedCode: String,
         retryTimeout: Instant
-    ) {
-        updateSession(id) {
-            VerificationSessionData(
-                id = it.id,
-                expectedCode = expectedCode,
-                ttl = it.ttl,
-                retryTimeout = retryTimeout,
-                isConfirmed = false
-            )
-        }
+    ) = updateSession(id) {
+        VerificationSessionData(
+            id = it.id,
+            expectedCode = expectedCode,
+            ttl = it.ttl,
+            retryTimeout = retryTimeout,
+            isConfirmed = false
+        )
     }
 
     override suspend fun updateVerificationSession(
         id: String,
         isConfirmed: Boolean
-    ) {
-        updateSession(id) {
-            VerificationSessionData(
-                id = it.id,
-                expectedCode = it.expectedCode,
-                ttl = it.ttl,
-                retryTimeout = it.retryTimeout,
-                isConfirmed = isConfirmed
-            )
-        }
+    ) = updateSession(id) {
+        VerificationSessionData(
+            id = it.id,
+            expectedCode = it.expectedCode,
+            ttl = it.ttl,
+            retryTimeout = it.retryTimeout,
+            isConfirmed = isConfirmed
+        )
     }
 
-    override suspend fun deleteVerificationSession(id: String) {
-        coroutineScope {
-            readVerificationSessionVariant(id)?.let {
-                ops.delete(varToSeshKey(it)).awaitSingle()
-            }
-            awaitAll(
-                async { ops.delete(seshToVarKey(id)) },
-                async { ops.delete(seshDataKey(id)) }
-            )
+
+    override suspend fun deleteVerificationSession(
+        id: String,
+    ) = withContext(Dispatchers.IO) {
+        readVerificationSessionVariant(id)?.let {
+            ops.delete(varToSeshKey(it)).awaitSingle()
         }
+
+        awaitAll(
+            async { ops.delete(seshToVarKey(id)) },
+            async { ops.delete(seshDataKey(id)) }
+        )
+
+        return@withContext
     }
 
     private suspend fun updateSession(
         id: String,
         updater: (VerificationSessionData) -> VerificationSessionData
-    ) {
+    ) = withContext(Dispatchers.IO) {
         readVerificationSession(id)?.let {
             if (it.ttl <= Instant.now() || it.isConfirmed) {
                 throw ExpiredException()
@@ -127,6 +131,7 @@ class VerificationRepositoryImpl(
                 Duration.of(verifySessionTTL, ChronoUnit.SECONDS)
             ).awaitSingle()
         } ?: throw NotFoundException()
+        return@withContext
     }
 
     private fun seshToVarKey(id: String) = "verif:sesh:${id}"

@@ -15,7 +15,7 @@ export function request(
         timeout = '15s' 
     } = {}
 ) {
-    console.log(`[request call] ${method} ${path}`);
+    // console.log(`[request call] ${method} ${path}`);
 
     const url = `${__ENV.URL}${path}`;
     const finalHeaders = { ...DEFAULT_HEADERS, ...headers };

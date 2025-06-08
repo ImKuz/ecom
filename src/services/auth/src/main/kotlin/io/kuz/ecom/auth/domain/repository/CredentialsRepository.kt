@@ -5,6 +5,6 @@ import io.kuz.ecom.auth.domain.model.CredentialsRecordModel
 
 interface CredentialsRepository {
 
-    fun createRecord(record: CredentialsRecordModel)
-    fun readRecord(provider: AuthProvider, identifier: String): CredentialsRecordModel?
+    suspend fun createRecord(record: CredentialsRecordModel)
+    suspend fun readRecord(provider: AuthProvider, identifier: String): CredentialsRecordModel?
 }

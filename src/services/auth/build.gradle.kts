@@ -8,9 +8,9 @@ group = "io.kuz"
 version = "unspecified"
 
 dependencies {
-    implementation(project(":proto"))
     implementation(project(":common"))
-    implementation(project(":grpc-mapper"))
+    implementation(project(":infra:proto"))
+    implementation(project(":infra:grpc-mapper"))
     implementation(libs.grpc.kotlin.stub)
     implementation(libs.grpc.netty)
     implementation(libs.spring.context)

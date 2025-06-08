@@ -1,4 +1,4 @@
-export const userDetails = (id) => ({
-    email: `foo${id}@mail.io`,
-    password: `foo_${id}`,
+export const userDetails = (id, iter) => ({
+    email: `test_user${id}_${iter}@example.com`,
+    password: `foo_${id}_${iter}`,
 });
