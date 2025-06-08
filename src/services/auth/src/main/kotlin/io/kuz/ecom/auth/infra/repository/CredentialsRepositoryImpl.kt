@@ -1,5 +1,6 @@
 package io.kuz.ecom.auth.infra.repository
 
+import com.fasterxml.jackson.databind.introspect.AnnotatedClass.Creators
 import io.kuz.ecom.auth.domain.repository.CredentialsRepository
 import io.kuz.ecom.auth.domain.model.AuthProvider
 import io.kuz.ecom.auth.domain.model.Credentials
@@ -7,8 +8,10 @@ import io.kuz.ecom.auth.domain.model.CredentialsRecordModel
 import io.kuz.ecom.auth.infra.db.table.CredentialsTable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Service
 

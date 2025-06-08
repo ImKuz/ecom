@@ -20,6 +20,7 @@ include(
     ":services:product",
     ":infra:proto",
     ":infra:grpc-mapper",
+    ":infra:spring-helpers"
 )
 
 project(":common").projectDir = file("src/common")
@@ -28,3 +29,4 @@ project(":services:auth").projectDir = file("src/services/auth")
 project(":services:product").projectDir = file("src/services/product")
 project(":infra:proto").projectDir = file("src/infra/proto")
 project(":infra:grpc-mapper").projectDir = file("src/infra/grpc-mapper")
+project(":infra:spring-helpers").projectDir = file("src/infra/spring-helpers")

@@ -7,7 +7,6 @@ import io.kuz.ecom.auth.domain.model.*
 import io.kuz.ecom.auth.domain.repository.AuthSessionsRepository
 import io.kuz.ecom.auth.domain.repository.CredentialsRepository
 import io.kuz.ecom.auth.domain.repository.VerificationRepository
-import kotlinx.coroutines.withContext
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.util.UUID
@@ -22,9 +21,7 @@ class AuthServiceImpl(
 ): AuthService {
 
     override suspend fun signUp(sessionId: String, password: String): SessionTokensData {
-        val t1 = System.nanoTime()
         val data = verificationRepo.readChecked(sessionId)
-        println("AAAA: t1 Block took ${(System.nanoTime() - t1) / 1_000_000.0} ms")
 
         if (!data.isConfirmed) throw NotConfirmedException()
 
@@ -34,10 +31,8 @@ class AuthServiceImpl(
 
         verificationRepo.deleteVerificationSession(sessionId)
 
-
         val userId = UUID.randomUUID()
 
-        val t2 = System.nanoTime()
         credentialsRepo.createRecord(
             CredentialsRecordModel(
                 userId = userId,
@@ -47,12 +42,8 @@ class AuthServiceImpl(
                 )
             )
         )
-        println("AAAA: t2 Block took ${(System.nanoTime() - t2) / 1_000_000.0} ms")
 
-        val t3 = System.nanoTime()
-        val result = createAuthSession(userId.toString())
-        println("AAAA: t3 Block took ${(System.nanoTime() - t3) / 1_000_000.0} ms")
-        return result
+        return createAuthSession(userId.toString())
     }
 
     override suspend fun login(email: String, password: String): SessionTokensData {
