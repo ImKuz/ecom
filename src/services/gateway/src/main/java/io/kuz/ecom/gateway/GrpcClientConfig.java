@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
+import java.util.concurrent.TimeUnit;
+
 @Configuration
 public class GrpcClientConfig {
 
@@ -18,6 +20,10 @@ public class GrpcClientConfig {
         return ManagedChannelBuilder
             .forAddress("localhost", 7001)
             .usePlaintext()
+            .keepAliveTime(30, TimeUnit.SECONDS)
+            .keepAliveTimeout(10, TimeUnit.SECONDS)
+            .keepAliveWithoutCalls(true)
+            .maxInboundMessageSize(8 * 1024 * 1024)
             .build();
     }
 
@@ -26,6 +32,10 @@ public class GrpcClientConfig {
         return ManagedChannelBuilder
             .forAddress("localhost", 7003)
             .usePlaintext()
+            .keepAliveTime(30, TimeUnit.SECONDS)
+            .keepAliveTimeout(10, TimeUnit.SECONDS)
+            .keepAliveWithoutCalls(true)
+            .maxInboundMessageSize(8 * 1024 * 1024)
             .build();
     }
 

@@ -38,7 +38,7 @@ class SessionVerificationServiceImpl(
             }
         }
 
-        if (credentialsRepo.readRecord(provider, identifier) == null) {
+        if (credentialsRepo.readRecord(provider, identifier) != null) {
             throw AlreadyExistsException()
         }
 

@@ -17,7 +17,7 @@ class PasswordHasherImpl(
     override suspend fun hash(
         password: String
     ): String = withContext(Dispatchers.IO) {
-        val cost = if (ProfileUtils.isProd(env)) 12 else 3
+        val cost = if (ProfileUtils.isProd(env)) 12 else 4
 
         BCrypt
             .withDefaults()
