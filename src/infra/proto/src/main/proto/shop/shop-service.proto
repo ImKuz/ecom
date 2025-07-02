@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package shop;
+
+import "google/protobuf/empty.proto";
+import "common/common.proto";
+import "shop/shop.proto";
+
+option java_package = "io.kuz.ecom.proto.shop";
+option java_multiple_files = true;
+
+service ShopService {
+
+  // Cart
+  rpc GetCartItems(GetCartItemsRequest) returns (GetCartItemsResponse);
+  rpc AddCartItem(AddCartItemRequest) returns (google.protobuf.Empty);
+  rpc RemoveCartItems(RemoveCartItemsRequest) returns (google.protobuf.Empty);
+  rpc ChangeCartItemQuantity(ChangeCartItemQuantityRequest) returns (google.protobuf.Empty);
+  rpc ProcessCartPurchase(ProcessCartPurchaseRequest) returns (google.protobuf.Empty);
+}
+
+message GetCartItemsRequest {
+  string userId = 1;
+  int64 limit = 2;
+  int64 offset = 3;
+}
+
+message GetCartItemsResponse {
+  repeated CartItem items = 1;
+  common.PaginationMeta meta = 2;
+}
+
+message AddCartItemRequest {
+  string userId = 1;
+  CartItem item = 2;
+}
+
+message RemoveCartItemsRequest {
+  string userId = 1;
+  repeated int64 itemIds = 2;
+}
+
+message ChangeCartItemQuantityRequest {
+  string userId = 1;
+  int64 productId = 2;
+  int64 count = 3;
+}
+
+message ProcessCartPurchaseRequest {
+  string userId = 1;
+  repeated CartItem items = 2;
+}
