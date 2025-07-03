@@ -35,8 +35,8 @@ class ProductGrpcService(
     ): GetProductListByCriteriaResponse {
         val result = getProductListByCriteriaCase(
             criteria = ProductFetchCriteriaMapper.toModel(request.criteria),
-            offset = request.offset,
-            limit = request.limit,
+            page = request.page.toInt(),
+            pageSize = request.pageSize.toInt(),
         )
 
         return GetProductListByCriteriaResponse

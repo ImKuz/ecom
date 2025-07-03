@@ -11,14 +11,14 @@ class GetProductListByCriteria(
 ) {
     suspend operator fun invoke(
         criteria: ProductFetchCriteriaModel,
-        limit: Long,
-        offset: Long,
+        page: Int,
+        pageSize: Int,
     ): ProductFetchResultModel {
         try {
             return repo.getProductList(
                 criteria = criteria,
-                limit = limit,
-                offset = offset,
+                page = page,
+                pageSize = pageSize,
             )
         } catch (e: Exception) {
             println("Exception in GetProductListByCriteria: ${e.message}")

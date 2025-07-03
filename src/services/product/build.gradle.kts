@@ -22,6 +22,8 @@ dependencies {
     implementation(libs.slf4j.api)
     implementation(libs.logback.classic)
     implementation(libs.spring.context)
+    implementation(libs.spring.boot.starter)
+    implementation(libs.spring.boot.starter.data.jdbc)
     testImplementation(kotlin("test"))
 }
 

@@ -9,7 +9,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PaginationMetaDTO {
 
-    private Long total;
-    private Long limit;
-    private Long offset;
+    private Long page;
+    private Long pageSize;
+    private Long pageCount;
 }

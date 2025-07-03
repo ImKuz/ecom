@@ -7,9 +7,9 @@ public class PaginationMetaMapper {
 
     public static PaginationMetaDTO toDTO(PaginationMeta proto) {
         return new PaginationMetaDTO(
-            (long) proto.getTotal(),
-            (long) proto.getLimit(),
-            (long) proto.getOffset()
+            (long) proto.getPage(),
+            (long) proto.getPageSize(),
+            (long) proto.getPageCount()
         );
     }
 }

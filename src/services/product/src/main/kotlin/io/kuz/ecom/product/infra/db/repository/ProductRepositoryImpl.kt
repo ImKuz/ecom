@@ -18,6 +18,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransacti
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.stereotype.Repository
 import java.io.IOException
+import kotlin.math.ceil
 import kotlin.math.min
 
 @Repository
@@ -46,14 +47,15 @@ class ProductRepositoryImpl: ProductRepository {
 
     override suspend fun getProductList(
         criteria: ProductFetchCriteriaModel,
-        offset: Long,
-        limit: Long
+        page: Int,
+        pageSize: Int
     ): ProductFetchResultModel = newSuspendedTransaction {
+        val (limit, offset) = toLimitOffset(page, pageSize)
         val criteriaConditions = buildProductCriteriaConditions(criteria).toMutableList()
 
         val optionsFilterPair = productsOptionsFilter(
             criteria.attributeOptions,
-            limit.toInt(),
+            limit,
             offset,
         )
         val productCountByOptions = optionsFilterPair?.first?.toLong()
@@ -74,12 +76,15 @@ class ProductRepositoryImpl: ProductRepository {
         val productQuery = ProductQuery
             .scopedSelectQuery
             .where { whereClause }
-            .limit(limit.toInt(), offset)
+            .limit(limit, offset)
             .toList()
 
         val productAttributesMap = fetchProductAttributesMap(
             productQuery.map { it[ProductTable.id].value }
         )
+
+        val count = min(productsCount, productCountByOptions ?: 0)
+        val pageCount = ceil(count.toDouble() / pageSize.toDouble()).toLong()
 
         return@newSuspendedTransaction ProductFetchResultModel(
             products = productQuery.map {
@@ -88,12 +93,9 @@ class ProductRepositoryImpl: ProductRepository {
                 ProductQuery.map(it, list)
             },
             meta = PaginationMetaModel(
-                limit = limit,
-                offset = offset,
-                total = min(
-                    productsCount,
-                    productCountByOptions ?: 0
-                )
+                page = page.toLong(),
+                pageSize = pageSize.toLong(),
+                pageCount = pageCount,
             )
         )
     }
@@ -236,5 +238,9 @@ class ProductRepositoryImpl: ProductRepository {
         ProductCategoriesTable.batchInsert(input) { value ->
             this[ProductCategoriesTable.code] = value.code
         }
+    }
+
+    private fun toLimitOffset(page: Int, pageSize: Int): Pair<Int, Long> {
+        return Pair(pageSize, ((page - 1) * pageSize).toLong())
     }
 }

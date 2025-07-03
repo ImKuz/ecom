@@ -15,8 +15,8 @@ interface ProductRepository {
 
     suspend fun getProductList(
         criteria: ProductFetchCriteriaModel,
-        offset: Long,
-        limit: Long
+        page: Int,
+        pageSize: Int,
     ): ProductFetchResultModel
 
     suspend fun batchCreateProductAttribute(input: List<ProductAttributeCreateInputModel>)
