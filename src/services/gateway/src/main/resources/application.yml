@@ -1,0 +1,23 @@
+grpc:
+  channel:
+    product:
+      host: localhost
+      port: 7001
+    auth:
+      host: localhost
+      port: 7003
+    shop:
+      host: localhost
+      port: 7004
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,metrics,health
+  endpoint:
+    prometheus:
+      enabled: true

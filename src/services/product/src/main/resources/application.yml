@@ -1,0 +1,8 @@
+grpc:
+  port: 7001
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:8844/ecom
+    username: usr
+    password: pass
+    driver-class-name: org.postgresql.Driver

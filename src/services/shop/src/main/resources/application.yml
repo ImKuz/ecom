@@ -1,0 +1,13 @@
+grpc:
+  port: 7004
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:8844/ecom
+    username: usr
+    password: pass
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+  jpa:
+    hibernate:
+      ddl-auto: update
