@@ -62,10 +62,7 @@ service DebugProductService {
 
 message GenerateDataRequest {
   int64 products_count = 1;
-  bool should_randomize_products_distribution = 2;
-  int64 categories_count = 3;
-  int64 attributes_per_category_min = 4;
-  int64 attributes_per_category_max = 5;
-  int64 options_per_attribute_min = 6;
-  int64 options_per_attribute_max = 7;
+  int64 categories_count = 2;
+  int64 attributes_count = 3;
+  int64 options_count = 4;
 }

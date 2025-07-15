@@ -24,9 +24,17 @@ dependencies {
     implementation(libs.spring.context)
     implementation(libs.spring.boot.starter)
     implementation(libs.spring.boot.starter.data.jdbc)
+    implementation(libs.kotlinx.cli)
     testImplementation(kotlin("test"))
 }
 
 application {
     mainClass.set("io.kuz.ecom.product.ProductServiceApplicationKt")
+}
+
+tasks.register<JavaExec>("runDataGenerator") {
+    group = "application"
+    description = "Run the data generation"
+    mainClass.set("io.kuz.ecom.product.DataGeneratorCLIKt")
+    classpath = sourceSets["main"].runtimeClasspath
 }

@@ -29,6 +29,7 @@ jackson = "2.17.1"
 java-jwt = "4.5.0"
 bcrypt = "0.10.2"
 micrometer = "1.15.0"
+kotlinx-cli = "0.3.6"
 
 # Lombok (plugin only)
 lombok = "8.13.1"
@@ -77,6 +78,7 @@ kotlinx-coroutines-reactor = { module = "org.jetbrains.kotlinx:kotlinx-coroutine
 java-jwt = { module = "com.auth0:java-jwt", version.ref = "java-jwt" }
 bcrypt = { module = "at.favre.lib:bcrypt", version.ref = "bcrypt" }
 micrometer-registry-prometheus = { module = "io.micrometer:micrometer-registry-prometheus", version.ref = "micrometer" }
+kotlinx-cli = { module = "org.jetbrains.kotlinx:kotlinx-cli", version.ref = "kotlinx-cli" }
 
 # JUnit / Test
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher", version = "1.10.2" }

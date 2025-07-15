@@ -188,7 +188,7 @@ class ProductRepositoryImpl: ProductRepository {
         for (product in input) {
             val id = ProductTable.insertAndGetId {
                 it[title] = product.title
-                it[categoryId] = product.categoryId
+                it[categoryId] = product.categoryId.toInt()
                 it[priceCents] = product.priceCents
             }.value
 
@@ -219,7 +219,7 @@ class ProductRepositoryImpl: ProductRepository {
     ): Unit = transaction {
         ProductAttributesTable.batchInsert(input) { value ->
             this[ProductAttributesTable.code] = value.code
-            this[ProductAttributesTable.categoryId] = value.categoryId
+            this[ProductAttributesTable.categoryId] = value.categoryId.toInt()
         }
     }
 

@@ -33,7 +33,7 @@ object ProductMapper {
     fun toModel(grpc: ProductCreateInput): ProductCreateInputModel {
         return ProductCreateInputModel(
             title = grpc.title,
-            categoryId = grpc.categoryId.toInt(),
+            categoryId = grpc.categoryId,
             attributeOptions = grpc.attributeOptionsList,
             priceCents = grpc.priceCents
         )
@@ -60,7 +60,7 @@ object ProductAttributeMapper {
 
     fun toModel(grpc: ProductAttributeCreateInput): ProductAttributeCreateInputModel {
         return  ProductAttributeCreateInputModel(
-            categoryId = grpc.categoryId.toInt(),
+            categoryId = grpc.categoryId,
             code = grpc.code,
         )
     }
