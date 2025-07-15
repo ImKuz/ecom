@@ -1,5 +1,6 @@
 import http from 'k6/http';
 import { check, fail } from 'k6';
+import { isOK } from './checks';
 
 export const DEFAULT_HEADERS = {
     'Content-Type': 'application/json',
@@ -46,7 +47,7 @@ export function runChecks(res, ...checks) {
     return check(res, obj);
 }
 
-export function checkedCall(res, ...checks) {
+export function checkedApiCall(res, ...checks) {
     if (!runChecks(res, ...checks)) {
         fail('Check failed');
     }
@@ -63,4 +64,8 @@ export function checkedCall(res, ...checks) {
         message: body.message,
         isSuccess: body.isSuccess
     }
+}
+
+export function apiCall(res) {
+    return checkedApiCall(res, isOK);
 }
