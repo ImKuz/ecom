@@ -15,7 +15,7 @@ service AuthService {
   rpc EmailSignUp(EmailSignUpRequest) returns (AuthSessionResponse);
   rpc EmailLogin(EmailLoginRequest) returns (AuthSessionResponse);
   rpc Logout(LogoutRequest) returns (google.protobuf.Empty);
-  rpc ValidateToken(ValidateTokenRequest) returns (google.protobuf.Empty);
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse);
 }
 
 message SignUpInitiateVerificationRequest {
@@ -60,6 +60,10 @@ message LogoutRequest {
 
 message ValidateTokenRequest {
   string token = 1;
+}
+
+message ValidateTokenResponse {
+  string user_id = 1;
 }
 
 enum AuthProvider {
